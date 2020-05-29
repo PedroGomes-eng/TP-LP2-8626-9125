@@ -8,11 +8,12 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Xml;
 using Excepcoes;
+using Newtonsoft.Json;
 using ObjetosUrgencia;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DadosUrgencia
 {
@@ -31,6 +32,8 @@ namespace DadosUrgencia
         #endregion
 
         #region Functions
+
+        #region Adiciona Entrada
         /// <summary>
         /// Adiciona um Conjunto de informações sobre o internamento de um utente nas urgências
         /// </summary>
@@ -55,6 +58,9 @@ namespace DadosUrgencia
             }
             return true;
         }
+        #endregion
+
+        #region Remove Entrada
         /// <summary>
         /// Remove um conjunto de informações da lista de informações
         /// </summary>
@@ -80,72 +86,41 @@ namespace DadosUrgencia
                 throw e;
             }
         }
+        #endregion
+
+        #region Devolve lista
         /// <summary>
-        /// Altera uma das propriedades do conjunto de informações contido na lista
+        /// Devolve a lista de entradas para ser utilizada fora da camada de dados
         /// </summary>
-        /// <param name="i">Conjunto de Informações</param>
-        /// <param name="altera">Propriedade a alterar</param>
-        /// <param name="novo">Nova propriedade</param>
-        /// <returns></returns>
-        public static bool ChangeInfo(InfoUrgencia i, int altera, string novo)
+        /// <returns>uma cópia da lista de entradas nas urgências</returns>
+        public static List<InfoUrgencia> DevolveListainfos()
+        {
+            List<InfoUrgencia> copiainfos = todasInfos;
+            return copiainfos;
+        }
+        #endregion
+
+        #region Alterar Utentes
+
+        #region Alterar Data de entrada
+        /// <summary>
+        /// Altera a data de entrada nas urgências cujo número de utente e código de médico são inseridos pertencem
+        /// </summary>
+        /// <param name="nUtente">numero de utente desejado para alteração</param>
+        /// <param name="codMed">código de médico desejado para alteração</param>
+        /// <param name="dataEntrada">nova data de entrada</param>
+        /// <returns>true (se for efetuada a alteração)/false (se não for efetuada a alteração)</returns>
+        public static bool AlteraDataEntradaInfos(int nUtente, int codMed, DateTime dataEntrada)
         {
             try
             {
-                int a; //variável de auxílio à conversão para inteiros (ex: int.TryParse(novo, out todasInfos[i].CodMedico é inválido)
-                float b;
-                DateTime aux;
-                if (todasInfos.Contains(i))
+                foreach (InfoUrgencia i in todasInfos)
                 {
-                    //variável que indica a posição do conjunto de informações "i" na lista de infos
-                    int k = todasInfos.IndexOf(i);
-                    switch (altera)
+                    if (i.NumUtente == nUtente && i.CodMed == codMed)
                     {
-                        case 1: //caso seja desejado alterar o nº de untente da info inserida
-                            int.TryParse(novo, out a);
-                            todasInfos[k].NumUtente = a; //iguala a string "novo" à propriedade de "número de utente" do conjunto de informações inserido
-                            break;
-
-                        case 2://caso seja desejado alterar o código de médico do conjunto de informações inserido
-                            int.TryParse(novo, out a); //converte a string "novo" num inteiro a
-                            todasInfos[k].CodMed = a; //iguala o inteiro "a" à propriedade de "código de médico" do conjunto de informações inserido
-                            break;
-
-                        case 3://Caso seja desejado alterar a data de entrada do utente nas urgências do conjunto de informações inserido
-                            DateTime.TryParse(novo, out aux); //converte a string "novo" para o DateTime "aux"
-                            if (DateTime.TryParse(novo, out aux) == true) //verifica se a conversão foi um sucesso
-                            {
-                                todasInfos[k].DataEntrada = aux; ////iguala o DateTime "aux" à data de entrada do utente nas urgências do conjunto de informações inserido
-                            }
-                            break;
-
-                        case 4://caso seja desejado alterar a data de saída do utente das urgências do conjunto de informações inserido
-                            DateTime.TryParse(novo, out aux); //converte a string "novo" para o DateTime "aux"
-                            if (DateTime.TryParse(novo, out aux) == true) //verifica se a conversão foi um sucesso
-                            {
-                                todasInfos[k].DataSaida = aux; //iguala o DateTime "aux" à data de saída do utente do conjunto de informações inserido
-                            }
-                            break;
-
-                        case 5://caso seja desejado alterar a doença do utente do conjunto de informações inserido
-                            todasInfos[k].Doenca = novo; //iguala a string "novo" à propriedade de "Doença" do utente do conjunto de informações inserido
-                            break;
-
-                        case 6://caso seja desejado alterar o preço pago pelo utente do conjunto de informações inserido
-                            float.TryParse(novo, out b); //converte a string "novo" para o float "b"
-                            todasInfos[k].Preco = b; //iguala o float "b" à propriedade de "nome" do conjunto de informações inserido
-                            break;
-
-                        case 7://caso seja desejado alterar o tipo de urgência (Verde, Amarelo,Vermelho) do conjunto de informações inserido
-
-                            if (novo == "Verde" || novo == "Amarelo" || novo == "Vermelho") todasInfos[k].TipoUrgencia = novo; //caso a string inserida seja igual às apresentadas, iguala a mesma à propriedade de "TipoUrgência" do conjunto de informações inserido
-                            break;
-                        default:
-                            break;
+                        i.DataEntrada = dataEntrada; //iguala a data de entrada do utente para o dateTime de entrada
                     }
-                }
-                else
-                {
-                    return false;
+                    else return false;
                 }
                 return true;
             }
@@ -155,5 +130,228 @@ namespace DadosUrgencia
             }
         }
         #endregion
+
+        #region Alterar Data de saída
+        /// <summary>
+        /// Altera a data de saída das urgências cujo número de utente e código de médico são inseridos pertencem
+        /// </summary>
+        /// <param name="nUtente">numero de utente desejado para alteração</param>
+        /// <param name="codMed">código de médico desejado para alteração</param>
+        /// <param name="dataSaida">nova data de saída</param>
+        /// <returns>true (se for efetuada a alteração)/false (se não for efetuada a alteração)</returns>
+        public static bool AlteraDataSaidaInfos(int nUtente, int codMed, DateTime dataSaida)
+        {
+            try
+            {
+                foreach (InfoUrgencia i in todasInfos)
+                {
+                    if (i.NumUtente == nUtente && i.CodMed == codMed)
+                    {
+                        i.DataSaida = dataSaida; //iguala a data de saida do utente para o dateTime de entrada
+                    }
+                    else return false;
+                }
+                return true;
+            }
+            catch (InsereException e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+
+        #region Alterar tipo de urgência
+        /// <summary>
+        /// Altera o tipo de urgência cujo número de utente e código de médico são inseridos pertencem
+        /// </summary>
+        /// <param name="nUtente">numero de utente desejado para alteração</param>
+        /// <param name="codMed">código de médico desejado para alteração</param>
+        /// <param name="tipoUrgencia">novo tipo de urgência</param>
+        /// <returns>true (se for efetuada a alteração)/false (se não for efetuada a alteração)</returns>
+        public static bool AlteraTipoUrgenciaInfos(int nUtente, int codMed, string tipoUrgencia)
+        {
+            try
+            {
+                foreach (InfoUrgencia i in todasInfos)
+                {
+                    if (i.NumUtente == nUtente && i.CodMed == codMed)
+                    {
+                        i.TipoUrgencia = tipoUrgencia; //iguala a data de saida do utente para o dateTime de entrada
+                    }
+                    else return false;
+                }
+                return true;
+            }
+            catch (InsereException e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+
+        #region Alterar Doença
+        /// <summary>
+        /// Altera a doneça cujo número de utente e código de médico são inseridos pertencem
+        /// </summary>
+        /// <param name="nUtente">numero de utente desejado para alteração</param>
+        /// <param name="codMed">código de médico desejado para alteração</param>
+        /// <param name="doenca">nova doenca</param>
+        /// <returns>true (se for efetuada a alteração)/false (se não for efetuada a alteração)</returns>
+        public static bool AlteraDoencaInfos(int nUtente, int codMed, string doenca)
+        {
+            try
+            {
+                foreach (InfoUrgencia i in todasInfos)
+                {
+                    if (i.NumUtente == nUtente && i.CodMed == codMed)
+                    {
+                        i.Doenca = doenca; //iguala a data de saida do utente para o dateTime de entrada
+                    }
+                    else return false;
+                }
+                return true;
+            }
+            catch (InsereException e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+
+        #region Alterar preço
+        /// <summary>
+        /// Altera o preço a pagar pelo utente cujo número de utente e código de médico são inseridos pertencem
+        /// </summary>
+        /// <param name="nUtente">numero de utente desejado para alteração</param>
+        /// <param name="codMed">código de médico desejado para alteração</param>
+        /// <param name="preco">novo tipo de urgência</param>
+        /// <returns>true (se for efetuada a alteração)/false (se não for efetuada a alteração)</returns>
+        public static bool AlteraPrecoInfos(int nUtente, int codMed, double preco)
+        {
+            try
+            {
+                foreach (InfoUrgencia i in todasInfos)
+                {
+                    if (i.NumUtente == nUtente && i.CodMed == codMed)
+                    {
+                        i.Preco = preco; //iguala a data de saida do utente para o dateTime de entrada
+                    }
+                    else return false;
+                }
+                return true;
+            }
+            catch (InsereException e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+
+        #endregion
+
+        #region Escreve entradas BIN
+        /// <summary>
+        /// Insere as entradas nas urgências registadas num ficheiro binário
+        /// </summary>
+        /// <returns>true</returns>
+        public static bool EscreveBinInfos()
+        {
+            FileStream fs = new FileStream("Entradas.bin", FileMode.Create); //cria ficheiro binário
+            BinaryFormatter bf = new BinaryFormatter(); //cria serializador
+            bf.Serialize(fs, todasInfos); //serializa a lista
+            fs.Flush();
+            fs.Close(); //solta todos os recursos utilizados pela stream
+            return true;
+        }
+        #endregion
+
+        #region Carrega BIN Entradas
+        /// <summary>
+        /// Carrega o ficheiro Bin
+        /// </summary>
+        /// <param name="fileName">Ficheiro a ser Carregado</param>
+        /// <returns></returns>
+        public static bool LoadInfosBin(string fileName)
+        {
+            try
+            {
+                //Hashtable aux = null;
+                Stream s = File.Open(fileName, FileMode.Open, FileAccess.Read);
+                BinaryFormatter b = new BinaryFormatter();
+                todasInfos = (List<InfoUrgencia>)b.Deserialize(s);
+                s.Flush();
+                s.Close();
+                s.Dispose();
+                return true;
+            }
+            catch
+            {
+                throw new Exception("Erro");
+            }
+        }
+
+        #endregion
+
+        #region Escreve entradas em XML
+        /// <summary>
+        /// Escreve a lista de entradas nas urgências num ficheiro .xml
+        /// </summary>
+        /// <returns>true</returns>
+        public static bool EscreveXMLInfos()
+        {
+            XmlDocument xmlDoc = new XmlDocument(); //Cria um novo ficheiro XML
+            XmlNode rootNode = xmlDoc.CreateElement("entradasurg"); //Cria um nodo Raiz com o nome "entradasurg"
+            xmlDoc.AppendChild(rootNode);  //fecha o nodo raíz
+            foreach (InfoUrgencia i in todasInfos)
+            {
+                XmlNode infoNode = xmlDoc.CreateElement("entradaurg"); //cria um nodo filho de "entradasurg" com o nome "entradaurg"
+                XmlNode nutNode = xmlDoc.CreateElement("numeroutente"); //cria um nodo filho de "entradaurg" com o nome "numeroutente"
+                nutNode.InnerText = i.NumUtente.ToString(); //adiciona a propriedade "NumUtente" como texto interior do nodo "numerountente"
+                infoNode.AppendChild(nutNode); //fecha o nodo "numeroutente"
+                XmlNode cmedNode = xmlDoc.CreateElement("codigomedico");
+                cmedNode.InnerText = i.CodMed.ToString();
+                infoNode.AppendChild(cmedNode);
+                XmlNode dentNode = xmlDoc.CreateElement("dataentrada");
+                dentNode.InnerText = i.DataEntrada.ToString();
+                infoNode.AppendChild(dentNode);
+                XmlNode dsaiNode = xmlDoc.CreateElement("datasaida");
+                dsaiNode.InnerText = i.DataSaida.ToString();
+                infoNode.AppendChild(dsaiNode);
+                XmlNode turgNode = xmlDoc.CreateElement("tipourgencia");
+                turgNode.InnerText = i.TipoUrgencia;
+                infoNode.AppendChild(turgNode);
+                XmlNode doeNode = xmlDoc.CreateElement("doenca");
+                doeNode.InnerText = i.Doenca;
+                infoNode.AppendChild(doeNode);
+                XmlNode precoNode = xmlDoc.CreateElement("preco");
+                precoNode.InnerText = i.Preco.ToString();
+                infoNode.AppendChild(precoNode);
+                rootNode.AppendChild(infoNode);
+
+            }
+            xmlDoc.Save("Utentes.xml");
+            return true;
+        }
+        #endregion
+
+        #region Escreve entradas em JSON
+        /// <summary>
+        /// Escreve a lista de entradas nas urgências num ficheiro JSON
+        /// </summary>
+        /// <returns>true</returns>
+        public static bool EscreveJSONInfos()
+        {
+            TextWriter file = new StreamWriter("Entradas.json"); //inicia o gravador de texto e cria um ficheiro json com o nome de "Entradas"
+            string json = JsonConvert.SerializeObject(todasInfos, Newtonsoft.Json.Formatting.Indented); //converte numa string e serializa a lista "todasInfos" para formato json"
+            file.Write(json); //escreve a string convertida
+            Object aux = JsonConvert.DeserializeObject(json); //desserializa a string que foi convertida
+            file.Flush(); //limpa todos os buffers e faz com que quaisquer dados armazenados em buffer sejam gravados no dispositivo subjacente
+            file.Close(); //fecha o gravador e limpa todos os recursos do sistema associados ao gravador
+            return true;
+        }
+        #endregion
+
+        #endregion
+
     }
 }

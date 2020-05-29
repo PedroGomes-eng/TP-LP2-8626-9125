@@ -1,0 +1,6 @@
+C:\Users\Tiago Cruz\Desktop\TP2-LPII-8626-9125\TP-LP2-8626-9125\ObjetosUrgencia\obj\Debug\ObjetosUrgencia.csprojAssemblyReference.cache
+C:\Users\Tiago Cruz\Desktop\TP2-LPII-8626-9125\TP-LP2-8626-9125\ObjetosUrgencia\obj\Debug\ObjetosUrgencia.csproj.CoreCompileInputs.cache
+C:\Users\Tiago Cruz\Desktop\TP2-LPII-8626-9125\TP-LP2-8626-9125\ObjetosUrgencia\bin\Debug\ObjetosUrgencia.dll
+C:\Users\Tiago Cruz\Desktop\TP2-LPII-8626-9125\TP-LP2-8626-9125\ObjetosUrgencia\bin\Debug\ObjetosUrgencia.pdb
+C:\Users\Tiago Cruz\Desktop\TP2-LPII-8626-9125\TP-LP2-8626-9125\ObjetosUrgencia\obj\Debug\ObjetosUrgencia.dll
+C:\Users\Tiago Cruz\Desktop\TP2-LPII-8626-9125\TP-LP2-8626-9125\ObjetosUrgencia\obj\Debug\ObjetosUrgencia.pdb

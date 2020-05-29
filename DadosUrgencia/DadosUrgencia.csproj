@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,10 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InfosUrgencia.cs" />
-    <Compile Include="InfoUrgencia.cs" />
-    <Compile Include="Medico.cs" />
     <Compile Include="Medicos.cs" />
-    <Compile Include="Utente.cs" />
     <Compile Include="Utentes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -55,9 +55,13 @@
       <Name>Excepcoes</Name>
     </ProjectReference>
     <ProjectReference Include="..\ObjetosUrgencia\ObjetosUrgencia.csproj">
-      <Project>{8a13c095-9a4d-495b-81f5-8f2402596e3a}</Project>
+      <Project>{00a13967-d8cd-4bc5-b201-4ab971d87e5f}</Project>
       <Name>ObjetosUrgencia</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagramDados.cd" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

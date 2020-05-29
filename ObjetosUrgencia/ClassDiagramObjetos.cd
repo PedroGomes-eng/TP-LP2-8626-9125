@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ObjetosUrgencia.InfoUrgencia">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAFAAAEAQAAAAAAAAAAAAAgAQAAIAEQAAQAEEAABABA=</HashCode>
+      <FileName>InfoUrgencia.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ObjetosUrgencia.Medico">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQBAIAEAAAABAAAAAABAAAAAAAAAAAIAAAAAAAEAACA=</HashCode>
+      <FileName>Medico.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ObjetosUrgencia.Utente">
+    <Position X="1.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQACIEEAAAFBAAABAAAAAAAAAAAAAAAAAQAAAAEAAiA=</HashCode>
+      <FileName>Utente.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
